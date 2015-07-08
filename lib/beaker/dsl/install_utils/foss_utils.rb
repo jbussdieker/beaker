@@ -733,7 +733,7 @@ module Beaker
             if host['platform'] =~ /debian|ubuntu|solaris|cumulus/
               gem_env = YAML.load( on( host, 'gem environment' ).stdout )
               gem_paths_array = gem_env['RubyGems Environment'].find {|h| h['GEM PATHS'] != nil }['GEM PATHS']
-              path_with_gem = 'export PATH=' + gem_paths_array + ':${PATH}'
+              path_with_gem = 'export PATH=' + gem_paths_array.join(':') + ':${PATH}'
               on host, "echo '#{path_with_gem}' >> ~/.bashrc"
               gem_paths_array.each do |gem_path|
                 host.add_env_var('PATH', gem_path + '/bin')
