@@ -734,6 +734,7 @@ module Beaker
               gem_paths_array = gem_env['RubyGems Environment'].find {|h| h['GEM PATHS'] != nil }['GEM PATHS']
               path_with_gem = 'export PATH=' + gem_paths_array.join('/bin:') + '/bin' + ':${PATH}'
               on host, "echo '#{path_with_gem}' >> ~/.bashrc"
+              on host, "env"
             end
 
             if opts[:facter_version]
