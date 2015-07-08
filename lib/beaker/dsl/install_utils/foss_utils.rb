@@ -719,6 +719,10 @@ module Beaker
 
               host.install_package gempkg
             end
+            
+            if host['platform'] =~ /ubuntu-10/
+              host.install_package 'libopenssl-ruby1.8'
+            end
 
             # Link 'gem' to /usr/bin instead of adding /opt/csw/bin to PATH.
             if is_solaris10
