@@ -722,6 +722,7 @@ module Beaker
             
             if host['platform'] =~ /ubuntu-10/
               host.install_package 'libopenssl-ruby1.8'
+              on host, "env"
             end
 
             # Link 'gem' to /usr/bin instead of adding /opt/csw/bin to PATH.
@@ -732,9 +733,11 @@ module Beaker
             if host['platform'] =~ /debian|ubuntu|solaris|cumulus/
               gem_env = YAML.load( on( host, 'gem environment' ).stdout )
               gem_paths_array = gem_env['RubyGems Environment'].find {|h| h['GEM PATHS'] != nil }['GEM PATHS']
-              path_with_gem = 'export PATH=' + gem_paths_array.join('/bin:') + '/bin' + ':${PATH}'
+              path_with_gem = 'export PATH=' + gem_paths_array + ':${PATH}'
               on host, "echo '#{path_with_gem}' >> ~/.bashrc"
-              on host, "env"
+              gem_paths_array.each do |gem_path|
+                host.add_env_var('PATH', gem_path + '/bin')
+              end
             end
 
             if opts[:facter_version]
