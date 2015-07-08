@@ -531,7 +531,7 @@ module Beaker
           host.exec(Command.new("chmod 0600 #{Pathname.new(host[:ssh_env_file]).dirname}"))
           host.exec(Command.new("touch #{host[:ssh_env_file]}"))
           #add the constructed env vars to this host
-          #host.add_env_var('PATH', '$PATH')
+          host.add_env_var('PATH', '$PATH')
         end
         #add the env var set to this test host
         env.each_pair do |var, value|
