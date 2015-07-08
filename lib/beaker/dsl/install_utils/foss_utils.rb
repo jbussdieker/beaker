@@ -232,6 +232,13 @@ module Beaker
               elsif host['platform'] =~ /fedora-(\d+)/
                 relver = $1
                 install_puppet_from_rpm_on(host, opts.merge(:release => relver, :family => 'fedora'))
+              elsif host['platform'] =~ /(ubuntu-10)/
+                if opts[:default_action] == 'gem_install'
+                  opts[:version] ||= '~> 3.x'
+                  install_puppet_from_gem_on(host, opts)
+                else
+                  raise "install_puppet() called for unsupported platform '#{host['platform']}' on '#{host.name}'"
+                end
               elsif host['platform'] =~ /(ubuntu|debian|cumulus)/
                 install_puppet_from_deb_on(host, opts)
               elsif host['platform'] =~ /windows/
